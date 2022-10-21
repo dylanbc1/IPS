@@ -12,6 +12,38 @@ public class Hashtable<K, V> implements IHashtable<K, V> {
     } // Constructor
 
     @Override
+    public String toString(){
+        String msg = "";
+
+        for(HashtableNode<K,V> node : hashtable) {
+
+            if(node!=null){
+                if(node.getNext()!=null){
+                    msg += searchLastMsg(node);
+                } else {
+                    msg += node.getValue().toString()+"\n";
+                }
+            }
+        }
+
+        return msg;
+    }
+
+    public String searchLastMsg(HashtableNode<K, V> node) {
+
+        String msg = "";
+
+        if(node!=null){
+            msg += node.getValue().toString()+"\n";
+            searchLastMsg(node.getNext());
+        } else {
+            return msg;
+        }
+
+        return msg;
+    } // search last
+
+    @Override
     public int insert(HashtableNode<K, V> hashtableNode, K key) {
 
         int slot = hashFunction(key, hashtable.length);

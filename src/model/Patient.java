@@ -5,7 +5,7 @@ public class Patient implements Comparable<Patient> {
     private String id;
     private String name;
     private char genre;
-    private String[] birthDate;
+    private String birthDate;
     private int priority;
     private boolean isInQueue;
 
@@ -13,7 +13,7 @@ public class Patient implements Comparable<Patient> {
         this.id = id;
         this.name = name;
         this.genre = genre;
-        this.birthDate = birthDate.split("/");
+        this.birthDate = birthDate;
         this.priority = priority;
         this.isInQueue = false;
     }
@@ -24,6 +24,11 @@ public class Patient implements Comparable<Patient> {
 
     public void setInQueue(boolean inQueue) {
         isInQueue = inQueue;
+    }
+
+    @Override
+    public String toString(){
+        return id+"-"+name+"-"+genre+"-"+birthDate+"-"+priority;
     }
 
     public String getId() {
@@ -50,12 +55,12 @@ public class Patient implements Comparable<Patient> {
         this.genre = genre;
     }
 
-    public String[] getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
     public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate.split("/");
+        this.birthDate = birthDate;
     }
 
     public int getPriority() {

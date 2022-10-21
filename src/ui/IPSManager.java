@@ -26,6 +26,7 @@ public class IPSManager {
         System.out.println("\n|-----------------------------|");
         System.out.println("| Welcome to the IPS Software |");
         System.out.println("|-----------------------------|");
+        controller.load();
 
         boolean runFlag = true;
 
@@ -38,7 +39,10 @@ public class IPSManager {
                     "| 3. Check-in.\n|" +
                     "| 4. Check-out.\n|" +
                     "| 5. Attention order\n|" +
-                    "| 6. Undo.\n"+
+                    "| 6. Undo.\n|"+
+                    "| 7. Save data.\n|"+
+                    "| 8. Load data.\n|"+
+                    "| 0. Exit.\n|"+
                     "|--------------------------------------"
             );
             int decision0 = reader.nextInt(); // I ask the user what he/she wants to do.
@@ -152,6 +156,22 @@ public class IPSManager {
                         System.out.println("The action couldn't be undo.");
                     } else {
                         System.out.println("The action "+undoMsg+" has been undo.");
+                    }
+                    break;
+
+                case 7:
+                    if(controller.save().equalsIgnoreCase("")){
+                        System.out.println("The data has been saved successfully");
+                    } else {
+                        System.out.println("The data couldn't be added");
+                    }
+                    break;
+
+                case 8:
+                    if(controller.load().equalsIgnoreCase("")){
+                        System.out.println("The data has been loaded successfully");
+                    } else {
+                        System.out.println("The data couldn't be loaded");
                     }
                     break;
 

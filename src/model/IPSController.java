@@ -8,6 +8,8 @@ import queue.Queue;
 import queue.QueueNode;
 import stack.Stack;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 public class IPSController {
@@ -23,6 +25,48 @@ public class IPSController {
         this.priorityQueue = new PriorityQueue<>(100000);
         this.stack = new Stack<>();
     }
+
+    public String save(){
+        String text = hashtable.toString();
+
+        File file = new File("ips.temp");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(text.getBytes(StandardCharsets.UTF_8));
+            fos.close();
+            return "";
+
+        } catch (FileNotFoundException fnfe){
+            return fnfe.getMessage();
+        }catch (IOException ioException){
+            return ioException.getMessage();
+        }
+    }
+
+    public String load(){
+        File file = new File("ips.temp");
+
+        try{
+            FileInputStream fis = new FileInputStream(file);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String line;
+
+            while( (line = reader.readLine()) != null){
+                String[] parts = line.split("-");
+                Patient p = new Patient(parts[0], parts[1], parts[2].charAt(0), parts[3], Integer.parseInt(parts[4]));
+                HashtableNode<String, Patient> node = new HashtableNode<>(p.getId(), p);
+                hashtable.insert(node, node.getKey());
+            }
+            fis.close();
+            return "";
+
+        } catch (FileNotFoundException fnfe){
+            return fnfe.getMessage();
+        } catch (IOException ioException){
+            return ioException.getMessage();
+        }
+    } // load
 
     public Patient search(String id){
         if(hashtable.containsKey(id)){
