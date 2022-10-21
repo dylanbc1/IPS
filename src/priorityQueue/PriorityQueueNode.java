@@ -1,6 +1,6 @@
 package priorityQueue;
 
-public class PriorityQueueNode<E, K>{
+public class PriorityQueueNode<E, K extends Comparable<K>>{
 
     private K key;
     private E element;
@@ -8,6 +8,10 @@ public class PriorityQueueNode<E, K>{
     public PriorityQueueNode(E element, K key){
         this.element = element;
         this.key = key;
+    }
+
+    public int compareTo(K key) {
+        return this.key.compareTo(key);
     }
 
     public K getKey() {

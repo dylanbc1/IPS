@@ -6,7 +6,7 @@ public interface IHashtable <K, V> {
     public V search (K key);
     public void delete(K key);
     public int hashFunction(K key, int i);
-    public void chaining(HashtableNode<K,V> node, int slot);
+    public void chaining(HashtableNode<K,V> node, HashtableNode<K, V> current);
     public boolean containsKey(K key);
     public boolean containsValue(V value);
     public int occupedSize();

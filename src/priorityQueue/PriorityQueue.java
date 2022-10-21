@@ -1,6 +1,10 @@
 package priorityQueue;
 
-public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
+import model.Patient;
+
+import java.util.Collections;
+
+public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue<E, K> {
 
     private PriorityQueueNode<E, K>[] priorityQueue;
 
@@ -16,6 +20,20 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
         this.priorityQueue = priorityQueue;
     }
 
+    public void delete(int index){
+
+        if(isEmpty()){
+            return;
+        } else {
+            priorityQueue[index] = null;
+
+            for (int i = 0; i < priorityQueue.length-1; i++) {
+
+                priorityQueue[i] = priorityQueue[i+1];
+            }
+        }
+    } // delete
+
     @Override
     public boolean insert(PriorityQueueNode<E, K> node) {
 
@@ -26,29 +44,31 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
                 return true;
             }
         }
-
         return false;
     }
 
     @Override
     public PriorityQueueNode<E, K> maximum() {
-        quickSortMajorMinor(0, priorityQueue.length-1);
+        quickSortMajorMinor(0 );
         return priorityQueue[0];
     }
 
     @Override
     public PriorityQueueNode<E, K> minimum() {
-        quickSortMinorMajor(0, priorityQueue.length-1);
+        quickSortMinorMajor(0);
         return priorityQueue[0];
     }
 
     @Override
-    public PriorityQueueNode<E, K> extractMax() {
-        quickSortMajorMinor(0, priorityQueue.length-1);
+    public E extractMax() {
+        quickSortMajorMinor(0);
+
+        E element;
 
         if(isEmpty()){
             return null;
         } else {
+            element = priorityQueue[0].getElement();
             priorityQueue[0] = null;
 
             for (int i = 0; i < priorityQueue.length-1; i++) {
@@ -56,12 +76,12 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
             }
         }
 
-        return priorityQueue[0];
+        return element;
     }
 
     @Override
     public PriorityQueueNode<E, K> extractMin() {
-        quickSortMinorMajor(0, priorityQueue.length-1);
+        quickSortMinorMajor(0);
 
         if(isEmpty()){
             return null;
@@ -76,7 +96,8 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
         return priorityQueue[0];
     }
 
-    public void quickSortMajorMinor(int inicio, int fin) {
+    public void quickSortMajorMinor(int inicio){
+        int fin = 0;
 
         for (int i = 0; i < priorityQueue.length; i++) {
             if(priorityQueue[i]==null){
@@ -85,21 +106,22 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
             }
         }
 
+        quickSortMajorMinor(inicio, fin);
+    }
+
+    public void quickSortMajorMinor(int inicio, int fin) {
+
         if (inicio >= fin) return;
 
-        String pivote = (String) priorityQueue[inicio].getKey();
+        PriorityQueueNode<E,K> pivote = priorityQueue[inicio];
         int elemIzq = inicio + 1;
         int elemDer = fin;
 
-        String keyIzq = (String) priorityQueue[elemIzq].getKey();
-        String keyDer = (String) priorityQueue[elemDer].getKey();
-
-
         while (elemIzq <= elemDer) {
-            while (elemIzq <= fin && ( keyIzq.compareTo(pivote) >= 0 ) ) {
+            while (elemIzq <= fin && (priorityQueue[elemIzq].compareTo(pivote.getKey())) >= 0)  {
                 elemIzq++;
             }
-            while (elemDer > inicio && (keyDer.compareTo(pivote) < 0) ) {
+            while (elemDer > inicio && (priorityQueue[elemDer].compareTo(pivote.getKey())) < 0) {
                 elemDer--;
             }
             if (elemIzq < elemDer) {
@@ -118,6 +140,20 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
         quickSortMajorMinor(elemDer + 1, fin);
     } // quicksort for priority queue (major to minor)
 
+
+    public void quickSortMinorMajor(int inicio){
+        int fin = 0;
+
+        for (int i = 0; i < priorityQueue.length; i++) {
+            if(priorityQueue[i]==null){
+                fin = i-1;
+                break;
+            }
+        }
+
+        quickSortMinorMajor(inicio, fin);
+    }
+
     public void quickSortMinorMajor(int inicio, int fin) {
 
         for (int i = 0; i < priorityQueue.length; i++) {
@@ -129,19 +165,16 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
 
         if (inicio >= fin) return;
 
-        String pivote = (String) priorityQueue[inicio].getKey();
+        PriorityQueueNode<E,K> pivote = priorityQueue[inicio];
         int elemIzq = inicio + 1;
         int elemDer = fin;
 
-        String keyIzq = (String) priorityQueue[elemIzq].getKey();
-        String keyDer = (String) priorityQueue[elemDer].getKey();
-
 
         while (elemIzq <= elemDer) {
-            while (elemIzq <= fin && ( keyIzq.compareTo(pivote) < 0 ) ) {
+            while (elemIzq <= fin && (priorityQueue[elemIzq].compareTo(pivote.getKey())<0) ) {
                 elemIzq++;
             }
-            while (elemDer > inicio && (keyDer.compareTo(pivote) >= 0) ) {
+            while (elemDer > inicio && (priorityQueue[elemDer].compareTo(pivote.getKey()) >= 0) ) {
                 elemDer--;
             }
             if (elemIzq < elemDer) {
@@ -159,7 +192,6 @@ public class PriorityQueue<E, K> implements IPriorityQueue<E, K> {
         quickSortMinorMajor(inicio, elemDer - 1);
         quickSortMinorMajor(elemDer + 1, fin);
     } // quicksort for priority queue (minor to major)
-
 
     @Override
     public boolean increaseKey(E element, K key) {

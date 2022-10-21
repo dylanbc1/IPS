@@ -8,6 +8,8 @@ import queue.Queue;
 import queue.QueueNode;
 import stack.Stack;
 
+import java.util.Collections;
+
 public class IPSController {
 
     private Hashtable<String, Patient> hashtable;
@@ -41,30 +43,131 @@ public class IPSController {
 
     public boolean entry(String id){
         Patient patient = hashtable.search(id);
+
+        if(patient.isInQueue()){
+            return false;
+        }
+
+        patient.setInQueue(true);
         stack.push(new Action("entry", patient));
 
-        if(patient.getPriority()>0){
-            priorityQueue.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
-            return true;
+        if(patient!=null){
+            if(patient.getPriority()>0){
+                priorityQueue.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
+                return true;
+            } else {
+                queue.offer(new QueueNode<>(patient));
+                return true;
+            }
         } else {
-            queue.offer(new QueueNode<>(patient));
-            return true;
+            return false;
         }
     } // entry patient to queue
 
-    public Patient out(){
+    public String out(){
 
         Patient patient;
 
         if(priorityQueue.isEmpty()){
             patient = queue.poll();
+            patient.setInQueue(false);
         } else {
-            patient = priorityQueue.extractMax().getElement();
+            patient = priorityQueue.extractMax();
+            patient.setInQueue(false);
         }
 
         stack.push(new Action("out", patient));
-        return patient;
+
+        if(patient!=null){
+            return "- - ID: "+patient.getId()+
+                    "\n- - NAME: "+patient.getName();
+        } else {
+            return null;
+        }
     } // out
+
+    public String undo(){
+
+        Action action = stack.pop().getValue();
+
+        if(action!=null){
+            if(action.getWhichAction().equalsIgnoreCase("entry")){
+
+                if(action.getWhichPatient().getPriority()>0){
+
+                    for (int i = 0; i < priorityQueue.getPriorityQueue().length; i++) {
+
+                        if (priorityQueue.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                                (action.getWhichPatient().getId())) {
+                            priorityQueue.delete(i);
+                            return action.getWhichAction();
+                        }
+                    } // delete an inserted patient priority queue
+
+                } else {
+
+                    for (int i = 0; i < queue.getQueue().length; i++) {
+
+                        if (queue.getQueue()[i].getValue().getId().equalsIgnoreCase
+                                (action.getWhichPatient().getId())) {
+                            queue.delete(i);
+                            return action.getWhichAction();
+                        }
+                    } // delete an inserted patient queue
+                }
+
+            } else {
+                if(action.getWhichPatient().getPriority()>0){
+                    priorityQueue.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority()));
+                    // insert a deleted patient priority queue
+                    return action.getWhichAction();
+                } else {
+                    queue.offer(new QueueNode<>(action.getWhichPatient()));
+                    // insert a deleted patient queue
+                    return action.getWhichAction();
+                }
+            }
+        }
+
+        return "";
+    } // undo
+
+    public String queueOrder(){
+
+        String msg = "";
+
+        if(!priorityQueue.isEmpty()){
+            msg += "\n-> ID: "+priorityQueue.maximum().getElement().getId()+".\n" +
+                    "-> NAME: "+priorityQueue.getPriorityQueue()[0].getElement().getName()+".\n"+
+                    "-> PRIORITY: "+priorityQueue.getPriorityQueue()[0].getElement().getPriority()+"\n-------------------------";
+
+                for (int i = 1; i < priorityQueue.getPriorityQueue().length; i++) {
+
+                    if(priorityQueue.getPriorityQueue()[i]==null){
+                        break;
+                    }
+
+                    msg += "\n-> ID: "+priorityQueue.getPriorityQueue()[i].getElement().getId()+".\n" +
+                            "-> NAME: "+priorityQueue.getPriorityQueue()[i].getElement().getName()+".\n"+
+                            "-> PRIORITY: "+priorityQueue.getPriorityQueue()[i].getElement().getPriority()+"\n-------------------------";
+                }
+
+        }
+
+        if(!queue.isEmpty()){
+            for (int i = 0; i < queue.getQueue().length; i++) {
+
+                if(queue.getQueue()[i]==null){
+                    break;
+                }
+
+                msg += "\n-> ID: "+queue.getQueue()[i].getValue().getId()+".\n" +
+                        "-> NAME: "+queue.getQueue()[i].getValue().getName()+".\n-------------------------";
+            }
+        }
+
+        return msg;
+    }
 
     ///// GET and SET /////
     public Hashtable<String, Patient> getHashtable() {

@@ -1,12 +1,13 @@
 package model;
 
-public class Patient {
+public class Patient implements Comparable<Patient> {
 
     private String id;
     private String name;
     private char genre;
     private String[] birthDate;
     private int priority;
+    private boolean isInQueue;
 
     public Patient(String id, String name, char genre, String birthDate, int priority){
         this.id = id;
@@ -14,6 +15,15 @@ public class Patient {
         this.genre = genre;
         this.birthDate = birthDate.split("/");
         this.priority = priority;
+        this.isInQueue = false;
+    }
+
+    public boolean isInQueue() {
+        return isInQueue;
+    }
+
+    public void setInQueue(boolean inQueue) {
+        isInQueue = inQueue;
     }
 
     public String getId() {
@@ -54,5 +64,10 @@ public class Patient {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public int compareTo(Patient o) {
+        return this.name.compareTo(o.getName());
     }
 }

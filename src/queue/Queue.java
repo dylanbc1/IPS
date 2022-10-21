@@ -12,6 +12,20 @@ public class Queue<V> implements IQueue<V>{
         back = null;
     } // Constructor
 
+    public void delete(int index){
+
+        if(isEmpty()){
+            return;
+        } else {
+            queue[index] = null;
+
+            for (int i = 0; i < queue.length-1; i++) {
+
+                queue[i] = queue[i+1];
+            }
+        }
+    } // delete
+
     @Override
     public boolean isEmpty() {
         if(queue[0]==null){

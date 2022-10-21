@@ -21,14 +21,20 @@ public class Stack<V> implements IStack<V>{
     @Override
     public StackNode<V> pop() {
 
-        if(stack.size()==1){
-            top = null;
+        if(stack.size()==0){
+            return null;
         } else {
-            top = stack.get(stack.size()-2);
-        }
+            StackNode<V> topAux = stack.get(stack.size()-1);
+            stack.remove(stack.size()-1);
 
-        stack.remove(stack.size()-1);
-        return top;
+            if(stack.size()>0){
+                top = stack.get(stack.size()-1);
+            } else {
+                top = null;
+            }
+
+            return topAux;
+        }
     }
 
     @Override

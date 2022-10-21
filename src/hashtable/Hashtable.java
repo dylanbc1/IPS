@@ -1,8 +1,9 @@
 package hashtable;
 
+
 public class Hashtable<K, V> implements IHashtable<K, V> {
 
-    private HashtableNode<K, V> hashtable[];
+    private HashtableNode<K,V>[] hashtable;
     private int occupiedSize;
 
     public Hashtable(int size) {
@@ -13,7 +14,7 @@ public class Hashtable<K, V> implements IHashtable<K, V> {
     @Override
     public int insert(HashtableNode<K, V> hashtableNode, K key) {
 
-        int slot = hashFunction(key, occupiedSize);
+        int slot = hashFunction(key, hashtable.length);
 
         if (hashtable[slot] == null) {
             hashtable[slot] = hashtableNode;
@@ -37,7 +38,6 @@ public class Hashtable<K, V> implements IHashtable<K, V> {
             if (hashtable[i] != null) {
                 if (hashtable[i].getNext() != null) {
 
-
                     if (searchLast(hashtable[i], key) != null) {
                         value = searchLast(hashtable[i], key);
                         break;
@@ -47,6 +47,7 @@ public class Hashtable<K, V> implements IHashtable<K, V> {
 
                     if (hashtable[i].getKey().equals(key)) {
                         return hashtable[i].getValue();
+
                     } // if
 
                 } // if else
@@ -134,16 +135,20 @@ public class Hashtable<K, V> implements IHashtable<K, V> {
         return (int) Math.floor(i * ((kHash * a) % 1));
     } // Hash function
 
+    public void chaining(HashtableNode<K, V> node, int slot){
+        chaining(node, hashtable[slot]);
+    }
+
     @Override
-    public void chaining(HashtableNode<K, V> node, int slot) {
+    public void chaining(HashtableNode<K, V> node, HashtableNode<K, V> current) {
+        if(node!=null && current!=null){
+            if (current.getNext() == null) {
+                current.setNext(node);
+                node.setPrevious(current);
 
-        if (hashtable[slot].getNext() == null) {
-
-            hashtable[slot].setNext(node);
-            node.setPrevious(hashtable[slot]);
-
-        } else {
-            chaining(node.getNext(), slot);
+            } else {
+                chaining(node, current.getNext());
+            }
         }
 
     } // Chaining
