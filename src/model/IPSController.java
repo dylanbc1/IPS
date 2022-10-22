@@ -190,10 +190,14 @@ public class IPSController {
     public boolean registerPatient(String id, String name, char genre, String birthDate, int priority){
         Patient patient = new Patient(id, name, genre, birthDate, priority);
 
-        HashtableNode<String, Patient> hashtableNode = new HashtableNode<>(patient.getId(), patient);
-        hashtable.insert(hashtableNode, hashtableNode.getKey());
+        if(search(id)!=null){
+            return false;
+        } else {
+            HashtableNode<String, Patient> hashtableNode = new HashtableNode<>(patient.getId(), patient);
+            hashtable.insert(hashtableNode, hashtableNode.getKey());
 
-        return true;
+            return true;
+        }
     } // register patient
 
     public boolean entry(String id){
