@@ -39,15 +39,16 @@ public class IPSManager {
             System.out.println("\n\n      WHAT DO YOU WANT TO DO?");
             System.out.println("|-------------------------------------");
             System.out.println("|| 1. Search patient.\n|" +
-                    "| 2. Register patient\n|" +
-                    "| 3. Check-in.\n|" +
-                    "| 4. Check-out.\n|" +
-                    "| 5. Attention order\n|" +
-                    "| 6. Undo.\n|"+
-                    "| 7. Save data.\n|"+
-                    "| 8. Load data.\n|"+
-                    "| 9. Increase key to a patient with priority.\n"+
-                    "| 10. Decrease key to a patient with priority.\n"+
+                    "| 2. Edit patient.\n|" +
+                    "| 3. Register patient.\n|" +
+                    "| 4. Check-in.\n|" +
+                    "| 5. Check-out.\n|" +
+                    "| 6. Attention order.\n|"+
+                    "| 7. Undo.\n|"+
+                    "| 8. Save data.\n|"+
+                    "| 9. Load data.\n|"+
+                    "| 10. Increase priority to a patient with priority.\n|"+
+                    "| 11. Decrease priority to a patient with priority.\n|"+
                     "| 0. Exit.\n|"+
                     "|--------------------------------------"
             );
@@ -55,7 +56,7 @@ public class IPSManager {
 
             switch (decision0) {
                 case 1:
-                    System.out.println("Type the patient's ID");
+                    System.out.println("\nType the patient's ID");
                     String id = reader.next();
 
                     if(controller.search(id)!=null){
@@ -99,7 +100,40 @@ public class IPSManager {
                     break;
 
                 case 2:
-                    System.out.println("Type the patient's ID");
+                    System.out.println("\nType the ID of the patient");
+                    String id0 = reader.next();
+
+                    System.out.println("Which information do you want to change? \n" +
+                            "1) Name.\n" +
+                            "2) Priority.");
+                    int change = reader.nextInt();
+
+                    if(change==1){
+                        System.out.println("Type the new name");
+                        reader.nextLine();
+                        String newName = reader.nextLine();
+
+                        if(controller.editPatient(id0, 1, newName, 0)){
+                            System.out.println("\nThe name of the patient has been edited successfully");
+                        } else{
+                            System.out.println("\nThe name of the patient couldn't be edited");
+                        }
+                    } else if(change==2){
+                        System.out.println("Type the new priority");
+                        int newPriority = reader.nextInt();
+
+                        if(controller.editPatient(id0, 2, "", newPriority)){
+                            System.out.println("\nThe priority of the patient has been edited successfully");
+                        } else{
+                            System.out.println("\nThe priority of the patient couldn't be edited");
+                        }
+                    } else {
+                        System.out.println("Please type a valid option");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\nType the patient's ID");
                     String id2 = reader.next();
 
                     System.out.println("Type the patient's name");
@@ -109,7 +143,7 @@ public class IPSManager {
                     System.out.println("Which genre is the patient? Type: M for Male | F for Female");
                     char genre = reader.next().charAt(0);
 
-                    System.out.println("Type the birth date of the patient (DD/MM/YY)");
+                    System.out.println("Type the birth date of the patient (DD/MM/YYYY)");
                     String birthDate = reader.next();
 
                     System.out.println("The patient has any major underlying disease? If yes, type the amount of " +
@@ -151,8 +185,8 @@ public class IPSManager {
                     }
                     break;
 
-                case 3:
-                    System.out.println("Type the ID of the patient");
+                case 4:
+                    System.out.println("\nType the ID of the patient");
                     String id3 = reader.next();
 
                     System.out.println("In which lab do you want to entry the patient?\n" +
@@ -180,8 +214,8 @@ public class IPSManager {
 
                     break;
 
-                case 4:
-                    System.out.println("In which lab do you want to check out?\n" +
+                case 5:
+                    System.out.println("\nIn which lab do you want to check out?\n" +
                             "1) Hematology.\n" +
                             "2) General purpose.");
                     int lab4 = reader.nextInt();
@@ -205,8 +239,8 @@ public class IPSManager {
                     }
                     break;
 
-                case 5:
-                    System.out.println("In which lab do you want to know the order?\n" +
+                case 6:
+                    System.out.println("\nIn which lab do you want to know the order?\n" +
                             "1) Hematology.\n" +
                             "2) General purpose.");
                     int lab5 = reader.nextInt();
@@ -228,7 +262,7 @@ public class IPSManager {
                     }
                     break;
 
-                case 6:
+                case 7:
                     String undoMsg = "";
 
                     try{
@@ -245,17 +279,17 @@ public class IPSManager {
                     }
                     break;
 
-                case 7:
+                case 8:
                     if(controller.save().equalsIgnoreCase("")){
-                        System.out.println("The data has been saved successfully");
+                        System.out.println("\nThe data has been saved successfully");
                     } else {
                         System.out.println("The data couldn't be added");
                     }
                     break;
 
-                case 8:
+                case 9:
                     if(loadFlag){
-                        System.out.println("The data has been loaded previously.");
+                        System.out.println("\nThe data has been loaded previously.");
                     } else {
                         if(controller.load().equalsIgnoreCase("")){
                             System.out.println("The data has been loaded successfully");
@@ -265,8 +299,8 @@ public class IPSManager {
                     }
                     break;
 
-                case 9:
-                    System.out.println("The patient is in which lab?\n" +
+                case 10:
+                    System.out.println("\nThe patient is in which lab?\n" +
                             "1) Hematology.\n" +
                             "2) General purpose.");
                     int lab9 = reader.nextInt();
@@ -302,8 +336,8 @@ public class IPSManager {
                     }
                     break;
 
-                case 10:
-                    System.out.println("The patient is in which lab?\n" +
+                case 11:
+                    System.out.println("\nThe patient is in which lab?\n" +
                             "1) Hematology.\n" +
                             "2) General purpose.");
                     int lab10 = reader.nextInt();

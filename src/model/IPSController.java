@@ -29,6 +29,24 @@ public class IPSController {
         this.stack = new Stack<>();
     }
 
+    public boolean editPatient(String id, int option, String change, int changePriority){
+        if(hashtable.search(id)==null){
+            return false;
+        } else {
+            switch (option) {
+                case 1 -> {
+                    hashtable.search(id).setName(change);
+                    return true;
+                }
+                case 2 -> {
+                    hashtable.search(id).setPriority(changePriority);
+                    return true;
+                }
+            }
+        }
+        return false;
+    } // edit patient
+
     public boolean increaseKey(String id, int newAmount){
 
         if(priorityQueueHematology.getPriorityQueue().length==0){
@@ -98,7 +116,7 @@ public class IPSController {
 
     public boolean decreaseKeyGeneralPurpose(String id, int newAmount){
 
-        if(priorityQueueGeneralPurpose.getPriorityQueue().length==0){
+        if(priorityQueueGeneralPurpose.getPriorityQueue().length==0 && queueGeneralPurpose.getQueue().length==0){
             return false;
         } else {
             for (int i = 0; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) { // n
@@ -181,14 +199,14 @@ public class IPSController {
     public boolean entry(String id){
         Patient patient = hashtable.search(id);
 
-        if(patient.isInQueue()){
-            return false;
-        }
-
-        patient.setInQueue(true);
-        stack.push(new Action("entry", patient, 1));
-
         if(patient!=null){
+            if(patient.isInQueue()){
+                return false;
+            }
+
+            patient.setInQueue(true);
+            stack.push(new Action("entry", patient, 1));
+
             if(patient.getPriority()>0){
                 priorityQueueHematology.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
                 return true;
@@ -204,14 +222,14 @@ public class IPSController {
     public boolean entryGeneralPurpose(String id){
         Patient patient = hashtable.search(id);
 
-        if(patient.isInQueue()){
-            return false;
-        }
-
-        patient.setInQueue(true);
-        stack.push(new Action("entry", patient, 2));
-
         if(patient!=null){
+            if(patient.isInQueue()){
+                return false;
+            }
+
+            patient.setInQueue(true);
+            stack.push(new Action("entry", patient, 2));
+
             if(patient.getPriority()>0){
                 priorityQueueGeneralPurpose.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
                 return true;
@@ -322,6 +340,7 @@ public class IPSController {
 
                             if (priorityQueueHematology.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
                                     (action.getWhichPatient().getId())) { // n-1
+                                priorityQueueHematology.getPriorityQueue()[i].getElement().setInQueue(false);
                                 priorityQueueHematology.delete(i); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
                                 return action.getWhichAction(); // n-1
                             }
@@ -331,6 +350,7 @@ public class IPSController {
 
                             if (priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
                                     (action.getWhichPatient().getId())) { // n-1
+                                priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().setInQueue(false);
                                 priorityQueueGeneralPurpose.delete(i); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
                                 return action.getWhichAction(); // n-1
                             }
@@ -344,6 +364,7 @@ public class IPSController {
 
                             if (queueHematology.getQueue()[i].getValue().getId().equalsIgnoreCase
                                     (action.getWhichPatient().getId())) { // n - 1
+                                queueHematology.getQueue()[i].getValue().setInQueue(false);
                                 queueHematology.delete(i); // 2n - 3
                                 return action.getWhichAction(); // n-1
                             }
@@ -353,6 +374,7 @@ public class IPSController {
 
                             if (queueGeneralPurpose.getQueue()[i].getValue().getId().equalsIgnoreCase
                                     (action.getWhichPatient().getId())) { // n - 1
+                                queueGeneralPurpose.getQueue()[i].getValue().setInQueue(false);
                                 queueGeneralPurpose.delete(i); // 2n - 3
                                 return action.getWhichAction(); // n-1
                             }
@@ -366,10 +388,12 @@ public class IPSController {
                     if(action.getLab()==1){
                         priorityQueueHematology.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority())); // 2(n - 1)
                         // insert a deleted patient priority queue
+                        action.getWhichPatient().setInQueue(true);
                         return action.getWhichAction(); // 1
                     } else {
                         priorityQueueGeneralPurpose.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority())); // 2(n - 1)
                         // insert a deleted patient priority queue
+                        action.getWhichPatient().setInQueue(true);
                         return action.getWhichAction(); // 1
                     }
                 } else {
@@ -377,10 +401,12 @@ public class IPSController {
                     if(action.getLab()==1){
                         queueHematology.offer(new QueueNode<>(action.getWhichPatient())); // 5n - 3
                         // insert a deleted patient queue
+                        action.getWhichPatient().setInQueue(true);
                         return action.getWhichAction(); // 1
                     } else {
                         queueGeneralPurpose.offer(new QueueNode<>(action.getWhichPatient())); // 5n - 3
                         // insert a deleted patient queue
+                        action.getWhichPatient().setInQueue(true);
                         return action.getWhichAction(); // 1
                     }
                 }

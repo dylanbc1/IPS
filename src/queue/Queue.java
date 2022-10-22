@@ -131,4 +131,5 @@ public class Queue<V> implements IQueue<V>{
     public void setBack(QueueNode<V> back) {
         this.back = back;
     }
+
 } // Queue
