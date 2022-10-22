@@ -4,14 +4,24 @@ public class Action {
 
     private String whichAction;
     private Patient whichPatient;
+    private int lab;
 
-    public Action(String whichAction, Patient whichPatient){
+    public Action(String whichAction, Patient whichPatient, int lab){
         this.whichAction = whichAction;
         this.whichPatient = whichPatient;
+        this.lab = lab;
     }
 
     public String getWhichAction() {
         return whichAction;
+    }
+
+    public int getLab() {
+        return lab;
+    }
+
+    public void setLab(int lab) {
+        this.lab = lab;
     }
 
     public void setWhichAction(String whichAction) {

@@ -10,37 +10,62 @@ import stack.Stack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
 public class IPSController {
 
     private Hashtable<String, Patient> hashtable;
-    private Queue<Patient> queue;
-    private PriorityQueue<Patient, Integer> priorityQueue;
+    private Queue<Patient> queueHematology;
+    private PriorityQueue<Patient, Integer> priorityQueueHematology;
+    private Queue<Patient> queueGeneralPurpose;
+    private PriorityQueue<Patient, Integer> priorityQueueGeneralPurpose;
     private Stack<Action> stack;
 
     public IPSController(){
         this.hashtable = new Hashtable<>(100000);
-        this.queue = new Queue<>(100000);
-        this.priorityQueue = new PriorityQueue<>(100000);
+        this.queueHematology = new Queue<>(100000);
+        this.priorityQueueHematology = new PriorityQueue<>(100000);
+        this.queueGeneralPurpose = new Queue<>(100000);
+        this.priorityQueueGeneralPurpose = new PriorityQueue<>(100000);
         this.stack = new Stack<>();
     }
 
     public boolean increaseKey(String id, int newAmount){
 
-        if(priorityQueue.getPriorityQueue().length==0){
+        if(priorityQueueHematology.getPriorityQueue().length==0){
             return false;
         } else {
-            for (int i = 0; i < priorityQueue.getPriorityQueue().length; i++) { // n
+            for (int i = 0; i < priorityQueueHematology.getPriorityQueue().length; i++) { // n
 
-                if(priorityQueue.getPriorityQueue()[i]!=null){
-                    if (priorityQueue.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                if(priorityQueueHematology.getPriorityQueue()[i]!=null){
+                    if (priorityQueueHematology.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
                             (id)) { // n-1
-                        if(newAmount>priorityQueue.getPriorityQueue()[i].getElement().getPriority()){
-                            priorityQueue.getPriorityQueue()[i].getElement().setPriority(newAmount);
+                        if(newAmount> priorityQueueHematology.getPriorityQueue()[i].getElement().getPriority()){
+                            priorityQueueHematology.getPriorityQueue()[i].getElement().setPriority(newAmount);
                         }
 
-                        return priorityQueue.increaseKey(priorityQueue.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                        return priorityQueueHematology.increaseKey(priorityQueueHematology.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                    }
+                }
+            } // delete an inserted patient priority queue
+            return false;
+        }
+    } // increase key
+
+    public boolean increaseKeyGeneralPurpose(String id, int newAmount){
+
+        if(priorityQueueGeneralPurpose.getPriorityQueue().length==0){
+            return false;
+        } else {
+            for (int i = 0; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) { // n
+
+                if(priorityQueueGeneralPurpose.getPriorityQueue()[i]!=null){
+                    if (priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                            (id)) { // n-1
+                        if(newAmount> priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getPriority()){
+                            priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().setPriority(newAmount);
+                        }
+
+                        return priorityQueueGeneralPurpose.increaseKey(priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
                     }
                 }
             } // delete an inserted patient priority queue
@@ -50,20 +75,43 @@ public class IPSController {
 
     public boolean decreaseKey(String id, int newAmount){
 
-        if(priorityQueue.getPriorityQueue().length==0){
+        if(priorityQueueHematology.getPriorityQueue().length==0){
             return false;
         } else {
-            for (int i = 0; i < priorityQueue.getPriorityQueue().length; i++) { // n
+            for (int i = 0; i < priorityQueueHematology.getPriorityQueue().length; i++) { // n
 
-                if(priorityQueue.getPriorityQueue()[i]!=null){
+                if(priorityQueueHematology.getPriorityQueue()[i]!=null){
 
-                    if (priorityQueue.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                    if (priorityQueueHematology.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
                             (id)) { // n-1
 
-                        if(newAmount<priorityQueue.getPriorityQueue()[i].getElement().getPriority()){
-                            priorityQueue.getPriorityQueue()[i].getElement().setPriority(newAmount);
+                        if(newAmount< priorityQueueHematology.getPriorityQueue()[i].getElement().getPriority()){
+                            priorityQueueHematology.getPriorityQueue()[i].getElement().setPriority(newAmount);
                         }
-                        return priorityQueue.decreaseKey(priorityQueue.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                        return priorityQueueHematology.decreaseKey(priorityQueueHematology.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                    }
+                }
+            } // delete an inserted patient priority queue
+            return false;
+        }
+    } // decrease key
+
+    public boolean decreaseKeyGeneralPurpose(String id, int newAmount){
+
+        if(priorityQueueGeneralPurpose.getPriorityQueue().length==0){
+            return false;
+        } else {
+            for (int i = 0; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) { // n
+
+                if(priorityQueueGeneralPurpose.getPriorityQueue()[i]!=null){
+
+                    if (priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                            (id)) { // n-1
+
+                        if(newAmount< priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getPriority()){
+                            priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().setPriority(newAmount);
+                        }
+                        return priorityQueueGeneralPurpose.decreaseKey(priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement(), newAmount); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
                     }
                 }
             } // delete an inserted patient priority queue
@@ -138,14 +186,37 @@ public class IPSController {
         }
 
         patient.setInQueue(true);
-        stack.push(new Action("entry", patient));
+        stack.push(new Action("entry", patient, 1));
 
         if(patient!=null){
             if(patient.getPriority()>0){
-                priorityQueue.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
+                priorityQueueHematology.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
                 return true;
             } else {
-                queue.offer(new QueueNode<>(patient));
+                queueHematology.offer(new QueueNode<>(patient));
+                return true;
+            }
+        } else {
+            return false;
+        }
+    } // entry patient to queue
+
+    public boolean entryGeneralPurpose(String id){
+        Patient patient = hashtable.search(id);
+
+        if(patient.isInQueue()){
+            return false;
+        }
+
+        patient.setInQueue(true);
+        stack.push(new Action("entry", patient, 2));
+
+        if(patient!=null){
+            if(patient.getPriority()>0){
+                priorityQueueGeneralPurpose.insert(new PriorityQueueNode<>(patient, patient.getPriority()));
+                return true;
+            } else {
+                queueGeneralPurpose.offer(new QueueNode<>(patient));
                 return true;
             }
         } else {
@@ -157,35 +228,77 @@ public class IPSController {
 
         Patient patient;
 
-        for (int i = 0; i < priorityQueue.getPriorityQueue().length; i++) {
-            if(priorityQueue.getPriorityQueue()[i]!=null){
-                if(priorityQueue.getPriorityQueue()[i].getKey()==0){
-                    QueueNode<Patient> queueNode = new QueueNode(priorityQueue.getPriorityQueue()[i].getElement());
-                    queue.offer(queueNode);
-                    priorityQueue.delete(i);
+        for (int i = 0; i < priorityQueueHematology.getPriorityQueue().length; i++) {
+            if(priorityQueueHematology.getPriorityQueue()[i]!=null){
+                if(priorityQueueHematology.getPriorityQueue()[i].getKey()==0){
+                    QueueNode<Patient> queueNode = new QueueNode<>(priorityQueueHematology.getPriorityQueue()[i].getElement());
+                    queueHematology.offer(queueNode);
+                    priorityQueueHematology.delete(i);
                 }
             }
         }
 
-        for (int i = 0; i < queue.size(); i++) {
-            if(queue.getQueue()[i]!=null){
-                if(queue.getQueue()[i].getValue().getPriority()>0){
-                    PriorityQueueNode<Patient, Integer> priorityQueueNode = new PriorityQueueNode<>(queue.getQueue()[i].getValue(), queue.getQueue()[i].getValue().getPriority());
-                    priorityQueue.insert(priorityQueueNode);
-                    queue.delete(i);
+        for (int i = 0; i < queueHematology.size(); i++) {
+            if(queueHematology.getQueue()[i]!=null){
+                if(queueHematology.getQueue()[i].getValue().getPriority()>0){
+                    PriorityQueueNode<Patient, Integer> priorityQueueNode = new PriorityQueueNode<>(queueHematology.getQueue()[i].getValue(), queueHematology.getQueue()[i].getValue().getPriority());
+                    priorityQueueHematology.insert(priorityQueueNode);
+                    queueHematology.delete(i);
                 }
             }
         }
 
-        if(priorityQueue.isEmpty()){
-            patient = queue.poll();
+        if(priorityQueueHematology.isEmpty()){
+            patient = queueHematology.poll();
             patient.setInQueue(false);
         } else {
-            patient = priorityQueue.extractMax();
+            patient = priorityQueueHematology.extractMax();
             patient.setInQueue(false);
         }
 
-        stack.push(new Action("out", patient));
+        stack.push(new Action("out", patient, 1));
+
+        if(patient!=null){
+            return "- - ID: "+patient.getId()+
+                    "\n- - NAME: "+patient.getName();
+        } else {
+            return null;
+        }
+    } // out
+
+    public String outGeneralPurpose(){
+
+        Patient patient;
+
+        for (int i = 0; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) {
+            if(priorityQueueGeneralPurpose.getPriorityQueue()[i]!=null){
+                if(priorityQueueGeneralPurpose.getPriorityQueue()[i].getKey()==0){
+                    QueueNode<Patient> queueNode = new QueueNode<>(priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement());
+                    queueGeneralPurpose.offer(queueNode);
+                    priorityQueueGeneralPurpose.delete(i);
+                }
+            }
+        }
+
+        for (int i = 0; i < queueGeneralPurpose.size(); i++) {
+            if(queueGeneralPurpose.getQueue()[i]!=null){
+                if(queueGeneralPurpose.getQueue()[i].getValue().getPriority()>0){
+                    PriorityQueueNode<Patient, Integer> priorityQueueNode = new PriorityQueueNode<>(queueGeneralPurpose.getQueue()[i].getValue(), queueHematology.getQueue()[i].getValue().getPriority());
+                    priorityQueueGeneralPurpose.insert(priorityQueueNode);
+                    queueGeneralPurpose.delete(i);
+                }
+            }
+        }
+
+        if(priorityQueueGeneralPurpose.isEmpty()){
+            patient = queueGeneralPurpose.poll();
+            patient.setInQueue(false);
+        } else {
+            patient = priorityQueueGeneralPurpose.extractMax();
+            patient.setInQueue(false);
+        }
+
+        stack.push(new Action("out", patient, 2));
 
         if(patient!=null){
             return "- - ID: "+patient.getId()+
@@ -204,36 +317,72 @@ public class IPSController {
 
                 if(action.getWhichPatient().getPriority()>0){ // 1
 
-                    for (int i = 0; i < priorityQueue.getPriorityQueue().length; i++) { // n
+                    if(action.getLab()==1){
+                        for (int i = 0; i < priorityQueueHematology.getPriorityQueue().length; i++) { // n
 
-                        if (priorityQueue.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
-                                (action.getWhichPatient().getId())) { // n-1
-                            priorityQueue.delete(i); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
-                            return action.getWhichAction(); // n-1
-                        }
-                    } // delete an inserted patient priority queue
+                            if (priorityQueueHematology.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                                    (action.getWhichPatient().getId())) { // n-1
+                                priorityQueueHematology.delete(i); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                                return action.getWhichAction(); // n-1
+                            }
+                        } // delete an inserted patient priority queue
+                    } else {
+                        for (int i = 0; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) { // n
+
+                            if (priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getId().equalsIgnoreCase
+                                    (action.getWhichPatient().getId())) { // n-1
+                                priorityQueueGeneralPurpose.delete(i); // 2(n - 1) - 1 = 2n - 2 - 1 = | 2n - 3 |
+                                return action.getWhichAction(); // n-1
+                            }
+                        } // delete an inserted patient priority queue
+                    }
 
                 } else {
 
-                    for (int i = 0; i < queue.getQueue().length; i++) { // n
+                    if(action.getLab()==1){
+                        for (int i = 0; i < queueHematology.getQueue().length; i++) { // n
 
-                        if (queue.getQueue()[i].getValue().getId().equalsIgnoreCase
-                                (action.getWhichPatient().getId())) { // n - 1
-                            queue.delete(i); // 2n - 3
-                            return action.getWhichAction(); // n-1
-                        }
-                    } // delete an inserted patient queue
+                            if (queueHematology.getQueue()[i].getValue().getId().equalsIgnoreCase
+                                    (action.getWhichPatient().getId())) { // n - 1
+                                queueHematology.delete(i); // 2n - 3
+                                return action.getWhichAction(); // n-1
+                            }
+                        } // delete an inserted patient queue
+                    } else {
+                        for (int i = 0; i < queueGeneralPurpose.getQueue().length; i++) { // n
+
+                            if (queueGeneralPurpose.getQueue()[i].getValue().getId().equalsIgnoreCase
+                                    (action.getWhichPatient().getId())) { // n - 1
+                                queueGeneralPurpose.delete(i); // 2n - 3
+                                return action.getWhichAction(); // n-1
+                            }
+                        } // delete an inserted patient queue
+                    }
                 }
 
             } else {
                 if(action.getWhichPatient().getPriority()>0){ // 1
-                    priorityQueue.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority())); // 2(n - 1)
-                    // insert a deleted patient priority queue
-                    return action.getWhichAction(); // 1
+
+                    if(action.getLab()==1){
+                        priorityQueueHematology.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority())); // 2(n - 1)
+                        // insert a deleted patient priority queue
+                        return action.getWhichAction(); // 1
+                    } else {
+                        priorityQueueGeneralPurpose.insert(new PriorityQueueNode<>(action.getWhichPatient(), action.getWhichPatient().getPriority())); // 2(n - 1)
+                        // insert a deleted patient priority queue
+                        return action.getWhichAction(); // 1
+                    }
                 } else {
-                    queue.offer(new QueueNode<>(action.getWhichPatient())); // 5n - 3
-                    // insert a deleted patient queue
-                    return action.getWhichAction(); // 1
+
+                    if(action.getLab()==1){
+                        queueHematology.offer(new QueueNode<>(action.getWhichPatient())); // 5n - 3
+                        // insert a deleted patient queue
+                        return action.getWhichAction(); // 1
+                    } else {
+                        queueGeneralPurpose.offer(new QueueNode<>(action.getWhichPatient())); // 5n - 3
+                        // insert a deleted patient queue
+                        return action.getWhichAction(); // 1
+                    }
                 }
             }
         } // (sin los else)
@@ -248,33 +397,70 @@ public class IPSController {
 
         String msg = "";
 
-        if(!priorityQueue.isEmpty()){
-            msg += "\n-> ID: "+priorityQueue.maximum().getElement().getId()+".\n" +
-                    "-> NAME: "+priorityQueue.getPriorityQueue()[0].getElement().getName()+".\n"+
-                    "-> PRIORITY: "+priorityQueue.getPriorityQueue()[0].getElement().getPriority()+"\n-------------------------";
+        if(!priorityQueueHematology.isEmpty()){
+            msg += "\n-> ID: "+ priorityQueueHematology.maximum().getElement().getId()+".\n" +
+                    "-> NAME: "+ priorityQueueHematology.getPriorityQueue()[0].getElement().getName()+".\n"+
+                    "-> PRIORITY: "+ priorityQueueHematology.getPriorityQueue()[0].getElement().getPriority()+"\n-------------------------";
 
-                for (int i = 1; i < priorityQueue.getPriorityQueue().length; i++) {
+                for (int i = 1; i < priorityQueueHematology.getPriorityQueue().length; i++) {
 
-                    if(priorityQueue.getPriorityQueue()[i]==null){
+                    if(priorityQueueHematology.getPriorityQueue()[i]==null){
                         break;
                     }
 
-                    msg += "\n-> ID: "+priorityQueue.getPriorityQueue()[i].getElement().getId()+".\n" +
-                            "-> NAME: "+priorityQueue.getPriorityQueue()[i].getElement().getName()+".\n"+
-                            "-> PRIORITY: "+priorityQueue.getPriorityQueue()[i].getElement().getPriority()+"\n-------------------------";
+                    msg += "\n-> ID: "+ priorityQueueHematology.getPriorityQueue()[i].getElement().getId()+".\n" +
+                            "-> NAME: "+ priorityQueueHematology.getPriorityQueue()[i].getElement().getName()+".\n"+
+                            "-> PRIORITY: "+ priorityQueueHematology.getPriorityQueue()[i].getElement().getPriority()+"\n-------------------------";
                 }
 
         }
 
-        if(!queue.isEmpty()){
-            for (int i = 0; i < queue.getQueue().length; i++) {
+        if(!queueHematology.isEmpty()){
+            for (int i = 0; i < queueHematology.getQueue().length; i++) {
 
-                if(queue.getQueue()[i]==null){
+                if(queueHematology.getQueue()[i]==null){
                     break;
                 }
 
-                msg += "\n-> ID: "+queue.getQueue()[i].getValue().getId()+".\n" +
-                        "-> NAME: "+queue.getQueue()[i].getValue().getName()+".\n-------------------------";
+                msg += "\n-> ID: "+ queueHematology.getQueue()[i].getValue().getId()+".\n" +
+                        "-> NAME: "+ queueHematology.getQueue()[i].getValue().getName()+".\n-------------------------";
+            }
+        }
+
+        return msg;
+    }
+
+    public String queueOrderGeneralPurpose(){
+
+        String msg = "";
+
+        if(!priorityQueueGeneralPurpose.isEmpty()){
+            msg += "\n-> ID: "+ priorityQueueGeneralPurpose.maximum().getElement().getId()+".\n" +
+                    "-> NAME: "+ priorityQueueGeneralPurpose.getPriorityQueue()[0].getElement().getName()+".\n"+
+                    "-> PRIORITY: "+ priorityQueueGeneralPurpose.getPriorityQueue()[0].getElement().getPriority()+"\n-------------------------";
+
+            for (int i = 1; i < priorityQueueGeneralPurpose.getPriorityQueue().length; i++) {
+
+                if(priorityQueueGeneralPurpose.getPriorityQueue()[i]==null){
+                    break;
+                }
+
+                msg += "\n-> ID: "+ priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getId()+".\n" +
+                        "-> NAME: "+ priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getName()+".\n"+
+                        "-> PRIORITY: "+ priorityQueueGeneralPurpose.getPriorityQueue()[i].getElement().getPriority()+"\n-------------------------";
+            }
+
+        }
+
+        if(!queueGeneralPurpose.isEmpty()){
+            for (int i = 0; i < queueGeneralPurpose.getQueue().length; i++) {
+
+                if(queueGeneralPurpose.getQueue()[i]==null){
+                    break;
+                }
+
+                msg += "\n-> ID: "+ queueGeneralPurpose.getQueue()[i].getValue().getId()+".\n" +
+                        "-> NAME: "+ queueGeneralPurpose.getQueue()[i].getValue().getName()+".\n-------------------------";
             }
         }
 
@@ -291,19 +477,19 @@ public class IPSController {
     }
 
     public Queue<Patient> getQueue() {
-        return queue;
+        return queueHematology;
     }
 
     public void setQueue(Queue<Patient> queue) {
-        this.queue = queue;
+        this.queueHematology = queue;
     }
 
     public PriorityQueue<Patient, Integer> getPriorityQueue() {
-        return priorityQueue;
+        return priorityQueueHematology;
     }
 
     public void setPriorityQueue(PriorityQueue<Patient, Integer> priorityQueue) {
-        this.priorityQueue = priorityQueue;
+        this.priorityQueueHematology = priorityQueue;
     }
 
     public Stack<Action> getStack() {

@@ -4,8 +4,6 @@ import model.Patient;
 import priorityQueue.*;
 import queue.*;
 
-import java.util.Optional;
-
 public class PriorityQueueTest extends TestCase{
 
     private PriorityQueue<Patient, Integer> priorityQueue;

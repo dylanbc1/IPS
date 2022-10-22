@@ -1,9 +1,5 @@
 package priorityQueue;
 
-import model.Patient;
-
-import java.util.Collections;
-
 public class PriorityQueue<E, K extends Comparable<K>> implements IPriorityQueue<E, K> {
 
     private PriorityQueueNode<E, K>[] priorityQueue;
