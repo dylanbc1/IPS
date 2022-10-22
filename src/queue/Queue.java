@@ -14,17 +14,17 @@ public class Queue<V> implements IQueue<V>{
 
     public void delete(int index){
 
-        if(isEmpty()){
-            return;
+        if(isEmpty()){ // 1
+            return; // 1
         } else {
-            queue[index] = null;
+            queue[index] = null; // 1
 
-            for (int i = 0; i < queue.length-1; i++) {
+            for (int i = 0; i < queue.length-1; i++) { // n - 1
 
-                queue[i] = queue[i+1];
+                queue[i] = queue[i+1]; // n - 2
             }
         }
-    } // delete
+    } // delete -> TOTAL TEMPORAL = 1 + 1 +
 
     @Override
     public boolean isEmpty() {
@@ -54,11 +54,16 @@ public class Queue<V> implements IQueue<V>{
         if(isEmpty()){
             return null;
         } else {
+            int occupied = occupedSize();
             value = queue[0].getValue();
             queue[0] = null;
 
-            for (int i = 0; i < queue.length-1; i++) {
-                queue[i] = queue[i+1];
+            for (int i = 0; i <= occupied-1; i++) {
+                if(i==occupied-1){
+                    queue[i]=null;
+                } else {
+                    queue[i] = queue[i+1];
+                }
             }
         }
 
@@ -68,17 +73,17 @@ public class Queue<V> implements IQueue<V>{
     @Override
     public boolean offer(QueueNode<V> item) {
 
-        for (int i = 0; i < queue.length; i++) {
+        for (int i = 0; i < queue.length; i++) { // n
 
-            if(queue[i]==null){
-                queue[i] = item;
-                back = queue[i];
-                return true;
+            if(queue[i]==null){ // n - 1
+                queue[i] = item; // n - 1
+                back = queue[i]; // n - 1
+                return true; // n - 1
             }
         }
 
-        return false;
-    } // Offer
+        return false; // 1
+    } // Offer -> TOTAL TEMPORAL = n + 4(n-1) + 1 = n + 4n - 4 + 1 = | 5n - 3 |
 
     public int occupedSize(){
 

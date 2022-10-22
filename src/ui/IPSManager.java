@@ -42,6 +42,8 @@ public class IPSManager {
                     "| 6. Undo.\n|"+
                     "| 7. Save data.\n|"+
                     "| 8. Load data.\n|"+
+                    "| 9. Increase key to a patient with priority.\n"+
+                    "| 10. Decrease key to a patient with priority.\n"+
                     "| 0. Exit.\n|"+
                     "|--------------------------------------"
             );
@@ -172,6 +174,36 @@ public class IPSManager {
                         System.out.println("The data has been loaded successfully");
                     } else {
                         System.out.println("The data couldn't be loaded");
+                    }
+                    break;
+
+                case 9:
+                    System.out.println("Type the ID of the patient.");
+                    String id4 = reader.next();
+
+                    System.out.println("Type the new amount of major underlying diseases.");
+                    int newAmount = reader.nextInt();
+
+                    if(controller.increaseKey(id4, newAmount)){
+                        System.out.println("The priority has been updated");
+                    } else {
+                        System.out.println("The priority hasn't been updated. The patient isn't in the priority queue or the new" +
+                                " amount isn't major.");
+                    }
+                    break;
+
+                case 10:
+                    System.out.println("Type the ID of the patient.");
+                    String id5 = reader.next();
+
+                    System.out.println("Type the new amount of major underlying diseases.");
+                    int newAmount2 = reader.nextInt();
+
+                    if(controller.decreaseKey(id5, newAmount2)){
+                        System.out.println("The priority has been updated");
+                    } else {
+                        System.out.println("The priority hasn't been updated. The patient isn't in the priority queue or the new" +
+                                " amount isn't minor.");
                     }
                     break;
 
