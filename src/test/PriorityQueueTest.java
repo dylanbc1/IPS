@@ -152,7 +152,9 @@ public class PriorityQueueTest extends TestCase{
         priorityQueue.insert(new PriorityQueueNode<Patient, Integer>(patient5, patient5.getPriority()));
 
         assertEquals("4", priorityQueue.extractMax().getId());
+        assertNull(priorityQueue.getPriorityQueue()[4]);
         assertEquals("5", priorityQueue.extractMin().getId());
+        assertNull(priorityQueue.getPriorityQueue()[4]);
     }
 
     public void testExtractmaxExtractmin2(){
@@ -180,7 +182,9 @@ public class PriorityQueueTest extends TestCase{
         priorityQueue.insert(new PriorityQueueNode<Patient, Integer>(patient5, patient5.getPriority()));
 
         assertEquals("3", priorityQueue.extractMax().getId());
+        assertNull(priorityQueue.getPriorityQueue()[4]);
         assertEquals("5", priorityQueue.extractMin().getId());
+        assertNull(priorityQueue.getPriorityQueue()[4]);
     }
 
     public void testIncreaseDecreaseKey(){
