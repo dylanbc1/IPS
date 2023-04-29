@@ -1,7 +1,7 @@
-MADE BY: Dylan Bermudez Cardona | Victor Manuel Garzon Meneses | Luis Charria Meneses.
+## MADE BY: Dylan Bermudez Cardona | Victor Manuel Garzon Meneses | Luis Charria Meneses.
 
 
-PROBLEM CONTEXT:
+# PROBLEM
 
 The project was elaborated with the purpose of allows managing the the entry and exit of patients of two laboratories (Hematology and General Purpose).
 
